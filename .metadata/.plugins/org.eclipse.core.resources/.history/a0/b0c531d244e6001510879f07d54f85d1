@@ -1,0 +1,43 @@
+package DataAccessLayer;
+
+/** File: DataSource.java
+ * Author: Jine Chang
+ * Date: March 2016 
+ */
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DataSource {
+	private static Connection conn = null;
+	private final static String url = "jdbc:mysql://localhost:8889/";
+	private final static String dbName = "GarbageHunter";
+	private final static String driver = "com.mysql.jdbc.Driver";
+	private final static String userName = "root"; 
+	private final static String password = "root";
+	
+	public DataSource() {}
+	
+	public static Connection createConnection(){
+		try{
+			if (conn != null){ 
+				System.out.println("Cannot create new connection, one exists already");
+			}
+			else{ 
+				Class.forName(driver).newInstance();
+				conn = DriverManager.getConnection(url+dbName,userName,password);
+				System.out.println("Connected to the database");
+			}
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return conn;
+	}
+	
+	public static void main(String[] args) {
+		Connection conn = createConnection();
+		System.out.println(conn);
+	}
+
+}

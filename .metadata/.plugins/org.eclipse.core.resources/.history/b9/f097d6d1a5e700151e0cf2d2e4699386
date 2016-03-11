@@ -1,0 +1,13 @@
+package DataAccessLayer;
+
+import java.util.List;
+import DatatransferObjects.Item;
+
+public interface ItemDataAccessObject {
+	public int addItem(Item item); 
+	public int deleteItem(Item item);
+	public int updateItem(Item item);
+	public Item getItemByName(String itemName);
+	public List<Item> getItemByCategory(String category);
+	public List<Item> getAllItems();
+}

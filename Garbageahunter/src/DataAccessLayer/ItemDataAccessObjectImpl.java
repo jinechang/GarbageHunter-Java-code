@@ -1,0 +1,245 @@
+package DataAccessLayer;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import DatatransferObjects.Category;
+import DatatransferObjects.Item;
+
+public class ItemDataAccessObjectImpl implements ItemDataAccessObject{
+	
+	public ItemDataAccessObjectImpl(){
+		super();
+	}
+
+	@Override
+	public int addItem(Item item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int recordsChanged = 0;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection(); 
+			pstmt = con.prepareStatement( 
+					"INSERT INTO Item (ItemName, CategoryName) " +
+			        "VALUES(?, ?)");
+			pstmt.setString(1, item.getItemName()); 
+			pstmt.setString(2, item.getCategory().getCategoryName()); 
+			recordsChanged = pstmt.executeUpdate(); 
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{ if(pstmt != null){ pstmt.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{ if(con != null){ con.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return recordsChanged; //return 0 or 1
+	}
+
+	@Override
+	public int deleteItem(Item item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int recordsChanged = 0;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement(
+					"DELETE FROM Item WHERE ItemName = ?");	
+			pstmt.setString(1,item.getItemName());
+			recordsChanged = pstmt.executeUpdate();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{ if(pstmt != null){ pstmt.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{ if(con != null){ con.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return recordsChanged;
+	}
+
+	@Override
+	public int updateItem(Item item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int recordsChanged = 0;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement(
+					"UPDATE Item SET ItemName = ?, CategoryName = ?");
+			pstmt.setString(1, item.getItemName());
+			pstmt.setString(2, item.getCategory().getCategoryName());
+
+			recordsChanged = pstmt.executeUpdate();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{ if(pstmt != null){ pstmt.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{ if(con != null){ con.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return recordsChanged;
+	}
+
+	public List<Item> getAllItems(){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<Item> items = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement("SELECT ItemName,CategoryName FROM Item ORDER BY ItemName");
+			rs = pstmt.executeQuery();
+			items = new ArrayList<Item>();
+			while (rs.next()){
+				Item item = new Item();
+				item.setItem(rs.getString("ItemName"));
+				item.setCategory(new Category(rs.getString("CategoryName")));
+				items.add(item);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+	@Override
+	public Item getItemByName(String itemName) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Item item = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement("SELECT * FROM Item WHERE ItemName = ?");
+			pstmt.setString(1, itemName);
+			rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				item = new Item();
+				item.setItem(itemName);
+				item.setCategory(new Category(rs.getString("CategoryName")));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){
+					con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}	
+		}
+		return item;
+	}
+
+	@Override
+	public ArrayList<Item> getItemByCategory(Category category) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<Item> items = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			String cate = category.getCategoryName();
+			pstmt = con.prepareStatement("SELECT ItemName,CategoryName FROM Item WHERE CategoryName = ?");
+			pstmt.setString(1, cate);
+			rs = pstmt.executeQuery();
+			items = new ArrayList<Item>();
+			while (rs.next()){
+				Item item = new Item();
+				item.setItem(rs.getString("ItemName"));
+				item.setCategory(new Category(rs.getString("CategoryName")));
+				items.add(item);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+	@Override
+	public Item getItemByItem(Item item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String itemName = item.getItemName();
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement("SELECT * FROM Item WHERE ItemName = ?");
+			pstmt.setString(1, itemName);
+			rs = pstmt.executeQuery();
+
+			while(rs.next()){
+				item = new Item();
+				item.setItem(itemName);
+				item.setCategory(new Category(rs.getString("CategoryName")));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){
+					con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}	
+		}
+		return item;
+	}
+}

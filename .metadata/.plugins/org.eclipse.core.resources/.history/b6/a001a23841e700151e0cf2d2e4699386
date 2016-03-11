@@ -1,0 +1,106 @@
+package DatatransferObjects;
+
+import java.util.Date;
+
+public class PostItem {
+
+	private String postitem;
+	private Item item;
+	private Category category;
+	private User postUser;
+	private int yearsofuse;
+	private Date postDate;
+	private String discription;
+	private int postPrice;
+	private String pickupAddress;
+	private Date pickupTIme;
+	private Enum status;
+	
+	public PostItem(){
+		super();
+	};
+	public PostItem(String postitem){
+		this.postitem = postitem;
+	};
+	public void setPostItem(String postitem){
+		this.postitem = postitem;
+	}
+	public void setItem(String itemName){
+		Item item = new Item();
+		item.setItem(itemName);
+		this.item = item;
+	}
+	public void setItem(Item item){
+		this.item = item;
+	}
+	public void setCategory(String cateName){
+		Category cate = new Category();
+		cate.setCategoryName(cateName);
+		this.category = cate;
+	}
+	public void setCategory(Category cate){
+		this.category = cate;
+	}
+	public void setPostUser(User user){
+		this.postUser = user;
+	}
+	public void setYearsofuse(int years){
+		this.yearsofuse = years;
+	}
+	public void setPostDate(Date date){
+		this.postDate  = date;
+	}
+	public void setDescription(String discrip){
+		this.discription = discrip;
+	}
+	public void setPostPrice(int price){
+		this.postPrice = price;
+	}
+	public void setPickupTime(Date date){
+		this.pickupTIme = date;
+	}
+	public void setPickupAddress(String address){
+		this.pickupAddress = address;
+	}
+	public void setStatus(Enum status){
+		this.status = status;
+	}
+
+	public String getPostItem(){
+		return this.postitem;
+	}
+	public Item getItem(){
+		return this.item;
+	}
+	public Category getCategory(){
+		return this.category;
+	}
+	public User getPostUser(){
+		return this.postUser;
+	}
+	public int getYearsofuse(){
+		return this.yearsofuse;
+	}
+	public Date getPostDate(){
+		return this.postDate;
+	}
+	public String getDescription(){
+		return this.discription;
+	}
+	public int getPostPrice(){
+		return this.postPrice;
+	}
+	public Date getPickupTime(){
+		return this.pickupTIme;
+	}
+	public String getPickupAddress(){
+		return this.pickupAddress;
+	}
+	public Enum getStatus(){
+		return this.status;
+	}
+	public String toString(){
+		return "PostItem:"+this.getPostItem()+", Item:"+this.getItem().getItem()+", YearofUse:"
+				+this.yearsofuse+"Postprice:"+this.postPrice+"Status:"+this.status;
+	}
+}

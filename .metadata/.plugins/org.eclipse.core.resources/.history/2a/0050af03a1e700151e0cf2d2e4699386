@@ -1,0 +1,9 @@
+package DataAccessLayer;
+
+public enum PostitemStstus {
+	AVAILABLE,
+	HOLD,
+	SOLD,
+	GARBAGE;
+
+}

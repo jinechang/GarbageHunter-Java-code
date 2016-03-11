@@ -1,0 +1,93 @@
+import java.util.Date;
+import java.util.List;
+
+import BusinessLayer.ItemBusinessLogic;
+import BusinessLayer.PostItemBusinessLogic;
+import DataAccessLayer.Status;
+import DatatransferObjects.Category;
+import DatatransferObjects.Item;
+import DatatransferObjects.PostItem;
+import DatatransferObjects.User;
+
+public class Test {
+	PostItemBusinessLogic postlogic = new PostItemBusinessLogic();
+	ItemBusinessLogic itemlogic = new ItemBusinessLogic();
+
+	public void test() {
+
+			List<PostItem> list = null;
+			PostItem postItem = null;
+			String testRecordPrimaryKey = "";
+			
+			//post an item
+			System.out.println("-----Post an item-----");
+			
+			postItem = editItemForm();
+			if (postlogic.addItem(postItem)==1){
+				System.out.print("\nThis item is posted just now.");
+				}
+			
+			//search items posted
+			System.out.println("\n-----Search All TVs-----");
+			Item item = itemlogic.getItemByName("TV");
+			if(item != null){
+				list = postlogic.getItemByItem(item);
+				System.out.println("There are "+list.size()+" TVs are posted:");
+				for(PostItem post:list){
+					System.out.println(post.toString());
+				}
+				}
+			else
+				System.out.println("Not any TV is posted.");
+
+	}
+	
+	public PostItem editItemForm(){
+		PostItem postitem = new PostItem();
+		
+		System.out.println("Enter the data of item: ");
+		
+		String postitemName = "Java Programming";
+		System.out.println("postitemName: "+postitemName);
+		String itemName = "Technology book";
+		System.out.println("itemName: "+itemName);
+		String category = "BOOK";
+		System.out.println("category: "+category);
+		String seller = "Wenjun";
+		System.out.println("seller: "+seller);
+		int yearsofuse = 2;
+		System.out.println("yearsofuse: "+yearsofuse);
+		int postPrice = 200;
+		System.out.println("postPrice: "+postPrice);
+		
+		Item item = checkItem(itemName,category);
+		User user = checkUser(seller);
+		postitem.setPostItem(postitemName);
+		postitem.setItem(item);
+		postitem.setCategory(postitem.getItem().getCategory());
+		postitem.setPostUser(user);
+		postitem.setYearsofuse(yearsofuse);
+		postitem.setPostPrice(postPrice);
+		postitem.setStatus(Status.AVAILABLE);
+		
+		return postitem;
+	}
+	
+	private User checkUser(String seller) {
+		User user = new User(seller);
+		return user;
+	}
+
+	private Item checkItem(String itemName, String category) {
+
+		Item item = itemlogic.getItemByName(itemName);
+		if ( item == null){
+			System.out.println("add new Item:"+itemName+" with Category:"+category);
+			item = new Item(itemName,category);
+			itemlogic.addItem(item);
+		}
+			return item;
+	}
+
+
+}

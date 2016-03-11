@@ -1,0 +1,347 @@
+package DataAccessLayer;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.Date;
+import java.util.List;
+
+
+import DatatransferObjects.Category;
+import DatatransferObjects.Item;
+import DatatransferObjects.PostItem;
+
+public class PostItemDataAccessObjectImpl implements PostItemDataAccessObject{
+
+	@Override
+	public int addItem(PostItem item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int recordsChanged = 0;
+		try{
+			//check
+			System.out.println("000"+item.getPostItem());
+			DataSource ds = new DataSource();
+			con = ds.createConnection(); 
+			pstmt = con.prepareStatement( 
+					"INSERT INTO PostItem (PostItemName,ItemName, Years_of_use,Post_by,Post_price) " +
+			        "VALUES(?, ?, ?, ?, ?)");
+			pstmt.setString(1, item.getPostItem()); 
+			pstmt.setString(2, item.getItem().getItemName()); 
+			pstmt.setInt(3, item.getYearsofuse()); 
+			pstmt.setString(4, item.getPostUser().getUserName()); 
+			pstmt.setInt(5, item.getPostPrice()); 
+			recordsChanged = pstmt.executeUpdate(); 
+			
+		}
+		catch(SQLException e){
+			//e.printStackTrace();
+			System.out.println("Warning: This item is already posted" );
+		}
+		finally{
+			try{ if(pstmt != null){ pstmt.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{ if(con != null){ con.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return recordsChanged; //return 0 or 1
+	}
+
+	@Override
+	public int deleteItem(PostItem item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int recordsChanged = 0;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement(
+					"DELETE FROM PostItem WHERE PostItemName = ?");	
+			pstmt.setString(1,item.getPostItem());
+			recordsChanged = pstmt.executeUpdate();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{ if(pstmt != null){ pstmt.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{ if(con != null){ con.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return recordsChanged;
+	}
+
+	@Override
+	public int updateItem(PostItem item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int recordsChanged = 0;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement(
+					"UPDATE PostItem SET PostItem = ?, ItemName = ?, Years_of_use = ?,Post_by = ?,Post_price = ?");
+			pstmt.setString(1, item.getPostItem()); 
+			pstmt.setObject(2, item.getItem()); 
+			pstmt.setInt(3, item.getYearsofuse()); 
+			pstmt.setObject(4, item.getPostUser()); 
+			pstmt.setInt(5, item.getPostPrice()); 
+
+			recordsChanged = pstmt.executeUpdate();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{ if(pstmt != null){ pstmt.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{ if(con != null){ con.close(); }}
+			catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return recordsChanged;
+	}
+
+
+	@Override
+	public List<PostItem> getItemByItem(Item item) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<PostItem> items = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			String itemName = item.getItemName();
+			pstmt = con.prepareStatement("SELECT * FROM Postitem WHERE ItemName = ?");
+			pstmt.setString(1, itemName);
+			rs = pstmt.executeQuery();
+			items = writetoobject(rs);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			System.out.println("This item is not posted.");
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+	@Override
+	public List<PostItem> getItemByCategory(Category category) {
+		ItemDataAccessObject itemobject = new ItemDataAccessObjectImpl();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<PostItem> items = null;
+		
+		try{
+			List<PostItem> newlist = null;
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			ArrayList<Item> list = itemobject.getItemByCategory(category);
+			//check
+			//System.out.println(list.size());
+			for(Item item:list){
+				//check
+				//System.out.println(item.getItemName());
+				String itemname = item.getItemName();
+				pstmt = con.prepareStatement("SELECT * FROM Postitem WHERE ItemName = ?");
+				pstmt.setString(1, itemname);
+				//check
+				//System.out.println(pstmt);
+				rs = pstmt.executeQuery();
+				
+				newlist = writetoobject(rs);
+				//check
+				System.out.println(newlist.size());
+				for(PostItem l:newlist){
+					//check
+					System.out.println(l.getPostItem());
+					items.add(l);
+					//check
+					System.out.println(items.size());}
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+
+	@Override
+	public List<PostItem> getItemBySeller(String user) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<PostItem> items = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement("SELECT * FROM PostItem WHERE Post_by = ?");
+			pstmt.setString(1, user);
+			rs = pstmt.executeQuery();
+			
+			items = writetoobject(rs);
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			System.out.println("This item is not posted.");
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+	@Override
+	public List<PostItem> getItemByStatus(String status) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<PostItem> items = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement("SELECT * FROM PostItem WHERE Status = ?");
+			pstmt.setString(1, status);
+			rs = pstmt.executeQuery();
+			
+			items = writetoobject(rs);
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			System.out.println("This item is not posted.");
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+	@Override
+	public List<PostItem> getItemByDate(Date date) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<PostItem> items = null;
+		try{
+			DataSource ds = new DataSource();
+			con = ds.createConnection();
+			pstmt = con.prepareStatement("SELECT * FROM PostItem WHERE Post_date = ?");
+			pstmt.setDate(1, date);
+			rs = pstmt.executeQuery();
+			
+			items = writetoobject(rs);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			System.out.println("This item is not posted.");
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(SQLException ex){
+				System.out.println(ex.getMessage());}
+			try{
+				if(pstmt != null){pstmt.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+			try{
+				if(con != null){con.close();}
+			}catch(SQLException ex){System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+	
+	private List<PostItem> writetoobject(ResultSet rs){
+		ArrayList<PostItem> items = null;
+		
+		try{
+			items = new ArrayList<PostItem>();
+			while (rs.next()){
+				PostItem postitem = new PostItem();
+				//check
+				//System.out.println("----");
+				postitem.setPostItem(rs.getString("PostItemName"));
+				//check
+				System.out.println(rs.getString("ItemName"));
+				Item item = new Item(rs.getString("ItemName"));
+				postitem.setItem(item);
+				//check
+				//System.out.println(postitem.getPostItem()+","+postitem.getItem().getItemName());
+				postitem.setYearsofuse(rs.getInt("Years_of_use"));
+				//check
+				//System.out.println(rs.getInt("Years_of_use"));
+				postitem.setPostPrice(rs.getInt("Post_price"));
+				//check
+				//System.out.println(rs.getInt("Post_price"));
+				PostitemStatus sta=null;
+				postitem.setStatus(sta.valueOf(rs.getString("Status")));
+				//check
+				//System.out.println(sta.valueOf(rs.getString("Status")));
+				//check
+				//System.out.println(postitem.toString());
+				//check
+				//System.out.println(items.size());
+				items.add(postitem);
+			}
+		}
+		catch(NullPointerException | SQLException e){
+			e.printStackTrace();
+			System.out.println("This item is not posted.");
+		}
+		finally{
+			try{
+				if(rs != null){rs.close();}
+			}catch(NullPointerException | SQLException ex){
+				System.out.println(ex.getMessage());}
+		}
+		return items;
+	}
+
+}

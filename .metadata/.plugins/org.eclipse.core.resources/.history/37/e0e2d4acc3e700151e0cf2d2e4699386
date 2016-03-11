@@ -1,0 +1,32 @@
+package DataAccessLayer;
+
+import DatatransferObjects.Offer;
+import DatatransferObjects.PostItem;
+
+public class SellDataAccessObjectImpl implements SellerDataAccessObject{
+
+	@Override
+	public PostItem Post(PostItem item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int cancelPost(PostItem item) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public PostItem editPost(PostItem item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Offer Auction(PostItem item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

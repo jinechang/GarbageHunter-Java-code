@@ -1,0 +1,49 @@
+package DatatransferObjects;
+
+import java.util.UUID;
+
+public class Item  {
+	private String item; 
+	private Enum category; 
+
+	/**
+	 * default constructor
+	 */
+	public Item() {
+		super();
+	}
+	
+	public Item(String item){
+		this.item = item;
+	}
+	
+	public Item(String item, Enum cate){
+		this.item = item;
+		this.category = cate;
+	}
+	
+	/* ACCESSORS	-----------------------------------------------------	*/
+
+	public String getItem(){
+		return this.item;
+	}
+
+	public Enum getCategory(){
+		return this.category;
+	}
+
+	/* MODIFIERS	-----------------------------------------------------	*/
+
+	public void setItem(String item){
+		this.item = item;
+	}
+
+	public void setCategory(Enum cate){
+		this.category = cate;
+	}
+	
+	public void display(){
+		System.out.println(this.item+":"+ category);
+	}
+
+}

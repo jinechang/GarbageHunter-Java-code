@@ -1,0 +1,25 @@
+package BusinessLayer;
+
+import DataAccessLayer.SellerDataAccessObject;
+import DatatransferObjects.Offer;
+import DatatransferObjects.PostItem;
+
+public class SellerBusinessLogic {
+
+	private SellerDataAccessObject sellerDataAccessObject = null; 
+	public PostItem Post(PostItem item){
+		return sellerDataAccessObject.Post(item);
+	};
+	public int cancelPost(PostItem item){
+		return sellerDataAccessObject.cancelPost(item);
+	};
+	
+	public PostItem editPost(PostItem item){
+		return sellerDataAccessObject.editPost(item);
+	};
+	
+	public Offer Auction(PostItem item){
+		return sellerDataAccessObject.Auction(item);
+	};
+	
+}

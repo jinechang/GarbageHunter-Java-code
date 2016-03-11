@@ -1,0 +1,17 @@
+package DataAccessLayer;
+
+import java.util.Date;
+import java.util.List;
+
+import DatatransferObjects.Category;
+import DatatransferObjects.Item;
+import DatatransferObjects.PostItem;
+
+public interface PostItemDataAccessObject {
+
+	public int addItem(PostItem item);
+	public int deleteItem(PostItem item);
+	public int updateItem(PostItem item);
+	public List<PostItem> getItemByItem(Item item);
+	public List<PostItem> getItemByCategory(Category category);
+}

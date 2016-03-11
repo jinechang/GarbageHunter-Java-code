@@ -1,0 +1,11 @@
+package BusinessLayer;
+
+import DataAccessLayer.BuyerDataAccessObject;
+import DataAccessLayer.OfferDataAccessObjectImpl;
+import DatatransferObjects.Offer;
+import DatatransferObjects.PostItem; 
+
+public class BuyerBusinessLogic {
+
+	
+}

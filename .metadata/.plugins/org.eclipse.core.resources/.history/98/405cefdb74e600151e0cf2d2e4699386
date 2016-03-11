@@ -1,0 +1,43 @@
+package BusinessLayer;
+
+import java.util.List;
+
+import DataAccessLayer.ItemDataAccessObject;
+import DataAccessLayer.ItemDataAccessObjectImpl;
+import DataAccessLayer.PostItemDataAccessObject;
+import DatatransferObjects.Item;
+
+public class ItemBusinessLogic {
+	private ItemDataAccessObject itemDataAccessObject = null; 
+	
+	public ItemBusinessLogic(){
+		itemDataAccessObject = new ItemDataAccessObjectImpl();
+	}
+
+	public int addItem(Item item){
+		System.out.println("222222222")
+		return itemDataAccessObject.addItem(item);
+		
+	}; 
+	public int deleteItem(Item item){
+		return itemDataAccessObject.deleteItem(item);
+		
+	};
+	public int updateItem(Item item){
+		return itemDataAccessObject.updateItem(item);
+		
+	};
+	public Item getItemByName(String itemName){
+		System.out.println("333333333")
+		return itemDataAccessObject.getItemByName(itemName);
+		
+	};
+	public List<Item> getItemByCategory(String category){
+		return itemDataAccessObject.getItemByCategory(category);
+		
+	};
+	public List<Item> getAllItems(){
+		return itemDataAccessObject.getAllItems();
+		
+	};
+}

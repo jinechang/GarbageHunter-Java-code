@@ -1,0 +1,33 @@
+package BusinessLayer;
+
+import java.util.List;
+
+import DatatransferObjects.Item;
+
+public class ItemBusinessLogic {
+
+	public int addItem(Item item){
+		return 0;
+		
+	}; 
+	public int deleteItem(Item item){
+		return 0;
+		
+	};
+	public int updateItem(Item item){
+		return 0;
+		
+	};
+	public Item getItemByName(String itemName){
+		return null;
+		
+	};
+	public List<Item> getItemByCategory(String category){
+		return null;
+		
+	};
+	public List<Item> getAllItems(){
+		return null;
+		
+	};
+}

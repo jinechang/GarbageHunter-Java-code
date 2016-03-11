@@ -1,0 +1,32 @@
+package DatatransferObjects;
+
+import java.util.UUID;
+
+public class Category {
+
+	private String category; 
+
+	/**
+	 * default constructor
+	 */
+	public Category() {
+		super();
+	}
+	
+	public Category(String cate){
+		this.category = cate;
+	}
+	
+	/* ACCESSORS	-----------------------------------------------------	*/
+
+	public String getCategory(){
+		return this.category;
+	}
+
+	/* MODIFIERS	-----------------------------------------------------	*/
+
+	public void setCategory(String cate){
+		this.category = cate;
+	}
+
+}

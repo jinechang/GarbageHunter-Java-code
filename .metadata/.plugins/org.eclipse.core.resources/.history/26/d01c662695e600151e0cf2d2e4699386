@@ -1,0 +1,60 @@
+package DataAccessLayer;
+
+import java.util.Date;
+import java.util.List;
+
+import DatatransferObjects.Item;
+import DatatransferObjects.Offer;
+import DatatransferObjects.PostItem;
+
+public class BuyerDataAccessObjectImpl implements BuyerDataAccessObject{
+
+	@Override
+	public List<PostItem> searchByPostDate(Date date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PostItem> searchByItem(Item item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PostItem> searchByCategory(Enum cate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Offer giveOffer(PostItem item, int bid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int cancelOffer(Offer offer) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int addInterest(Item item) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteInterest(Item item) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Item> getAllInterest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
